@@ -1,8 +1,8 @@
 import Header from './components/header';
 import './app.css';
 
-const App = () => {
-  return <Header />;
+const App = ({ loginAuth }) => {
+  return <Header loginAuth={loginAuth} />;
 };
 
 export default App;
