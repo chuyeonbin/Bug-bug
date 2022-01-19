@@ -1,13 +1,35 @@
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { auth } from '../service/firebase';
 import LoginModal from './login_modal';
 
-function Header({ loginAuth }) {
+const StyledHeader = styled.header`
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const StyledLogo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const StyledButton = styled.button`
+  width: 100px;
+  height: 50px;
+  border: none;
+  font-size: 22px;
+  background: none;
+  cursor: pointer;
+`;
+
+const Header = ({ loginAuth }) => {
   const [showModal, setShowModal] = useState(false);
   const [inout, setInout] = useState(true);
 
-  const handleClickModal = () => {
-    setShowModal(!showModal);
+  const handleClickModal = onOff => {
+    setShowModal(onOff);
   };
 
   const onLogOut = () => {
@@ -16,7 +38,6 @@ function Header({ loginAuth }) {
 
   useEffect(() => {
     auth.onAuthStateChanged(user => {
-      console.log(user);
       if (user) {
         setShowModal(false);
         setInout(false);
@@ -27,19 +48,25 @@ function Header({ loginAuth }) {
   }, []);
 
   return (
-    <header>
-      <img src="/logo.png" alt="logo" width="50px" />
-      <h1>Bug-bug</h1>
+    <StyledHeader>
+      <StyledLogo>
+        <img src="/logo.png" alt="logo" width="50px" />
+        <h1>Bug-bug</h1>
+      </StyledLogo>
       {inout === true ? (
-        <button onClick={handleClickModal}>로그인</button>
+        <StyledButton onClick={() => handleClickModal(true)}>
+          로그인
+        </StyledButton>
       ) : (
-        <button onClick={onLogOut}>로그아웃</button>
+        <>
+          <StyledButton onClick={onLogOut}>로그아웃</StyledButton>
+        </>
       )}
       {showModal && (
-        <LoginModal loginAuth={loginAuth} onModal={handleClickModal} />
+        <LoginModal loginAuth={loginAuth} handleClickModal={handleClickModal} />
       )}
-    </header>
+    </StyledHeader>
   );
-}
+};
 
 export default Header;
